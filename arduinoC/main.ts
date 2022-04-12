@@ -121,20 +121,4 @@ namespace motorMesurement {
         let enaPin = parameter.ENAPIN.code;
         Generator.addCode(`encoder_${enaPin}_Value = 0;`);
     }
-
-    //% block="Motor speed mesurement on EN-A [ENAPIN] EN-B [ENBPIN] " blockType="command"
-    //% ENAPIN.shadow="dropdown" ENAPIN.options="PIN_ExternalInterrupts"
-    //% ENBPIN.shadow="dropdown" ENBPIN.options="PIN_DigitalWrite"
-    //% OAMSTATE.shadow="range"   OAMSTATE.params.min=0    OAMSTATE.params.max=255    OAMSTATE.defl=200
-    export function speedMesurementWithDir2(parameter: any, block: any) {
-        let outputModule = parameter.OUTPUTMODULEANALOG.code;
-        let outputModulePin = parameter.OAMPIN.code;
-        let outputModuleState = parameter.OAMSTATE.code;
-        if(Generator.board === 'esp32'){//如果是掌控板，生成如下代码
-            // Generator.addCode(`pwmv = map(${outputModuleState}, 0, 255, 0, 1023);`);
-            Generator.addCode(`analogWrite(${outputModulePin},map(${outputModuleState}, 0, 255, 0, 1023));`);
-        }else{
-            Generator.addCode(`analogWrite(${outputModulePin},${outputModuleState});`);
-        }
-    }
 }

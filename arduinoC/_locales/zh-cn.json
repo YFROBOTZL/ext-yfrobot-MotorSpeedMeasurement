@@ -1,5 +1,5 @@
 {
-    "motorMesurement.speedMesurement|block": "测速电机EN-A [ENAPIN]值",
-    "motorMesurement.speedMesurementWithDir|block": "测速电机EN-A [ENAPIN] EN-B [ENBPIN]值",
-    "motorMesurement.speedMesurementValueClear|block": "测速电机EN-A [ENAPIN]值清零"
+    "motorMesurement.speedMesurement|block": "测速电机A相 [ENAPIN]值",
+    "motorMesurement.speedMesurementWithDir|block": "测速电机A相 [ENAPIN] B相 [ENBPIN]值",
+    "motorMesurement.speedMesurementValueClear|block": "测速电机[ENAPIN]值清零"
 }
