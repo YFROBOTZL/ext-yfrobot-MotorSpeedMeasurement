@@ -104,6 +104,7 @@ namespace motorMesurement {
             `    } else { \n`+
             `      encoder_${enaPin}_Value++;\n`+
             `    }\n`+
+            `  }\n`+
             `}`
         );
 
