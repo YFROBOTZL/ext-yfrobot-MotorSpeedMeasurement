@@ -76,6 +76,44 @@ namespace motorMesurement {
         Generator.addCode(`encoder_${enaPin}_Value`);
     }
 
+
+    
+    //% block="Motor speed mesurement on EN-A [ENAPIN] EN-B [ENBPIN] " blockType="reporter"
+    //% ENAPIN.shadow="dropdown" ENAPIN.options="PIN_ExternalInterrupts"
+    //% ENBPIN.shadow="dropdown" ENBPIN.options="PIN_DigitalWrite"
+    export function speedMesurementWithDir(parameter: any, block: any) {
+        let enaPin = parameter.ENAPIN.code;
+        let enbPin = parameter.ENBPIN.code;
+
+        // Generator.addInclude(`defineEncoderA_${enaPin}`, `#define encodreA ${enaPin}\n`)
+        // Generator.addInclude(`defineupdateEncoder_${enaPin}`, `PROGMEM void updateEncoder_${enaPin}(); // 更新编码器值函数\n`)
+        
+        Generator.addInclude(`defineEncoderValue_${enaPin}`, `volatile long encoder_${enaPin}_Value = 0; \n`)
+
+        Generator.addInclude(`defineupdateEncoder_t_${enaPin}`, 
+            `void updateEncoder_${enaPin}() {  // 更新编码器值函数\n`+
+            `  if (digitalRead(${enaPin}) == HIGH) {\n`+
+            `    if (digitalRead(${enbPin}) == LOW) {\n`+
+            `      encoder_${enaPin}_Value++;\n`+
+            `    } else { \n`+
+            `      encoder_${enaPin}_Value--;\n`+
+            `    }\n`+
+            `  } else { \n`+
+            `    if (digitalRead(${enbPin}) == LOW) {\n`+
+            `      encoder_${enaPin}_Value--;\n`+
+            `    } else { \n`+
+            `      encoder_${enaPin}_Value++;\n`+
+            `    }\n`+
+            `}`
+        );
+
+        Generator.addSetup(`pinMode_${enaPin}`, `pinMode(${enaPin}, INPUT_PULLUP); // 将A相引脚设置为输入上拉`);
+        Generator.addSetup(`pinMode_${enbPin}`, `pinMode(${enbPin}, INPUT_PULLUP); // 将B相引脚设置为输入上拉`);
+        Generator.addSetup(`attachInterrupt_${enaPin}`, `attachInterrupt(digitalPinToInterrupt(${enaPin}), updateEncoder_${enaPin}, RISING);`);
+
+        Generator.addCode(`encoder_${enaPin}_Value`);
+    }
+
     
     //% block="Encoder Value Clear on EN-A [ENAPIN] " blockType="command"
     //% ENAPIN.shadow="dropdown" ENAPIN.options="PIN_ExternalInterrupts"
@@ -88,7 +126,7 @@ namespace motorMesurement {
     //% ENAPIN.shadow="dropdown" ENAPIN.options="PIN_ExternalInterrupts"
     //% ENBPIN.shadow="dropdown" ENBPIN.options="PIN_DigitalWrite"
     //% OAMSTATE.shadow="range"   OAMSTATE.params.min=0    OAMSTATE.params.max=255    OAMSTATE.defl=200
-    export function speedMesurementWithDir(parameter: any, block: any) {
+    export function speedMesurementWithDir2(parameter: any, block: any) {
         let outputModule = parameter.OUTPUTMODULEANALOG.code;
         let outputModulePin = parameter.OAMPIN.code;
         let outputModuleState = parameter.OAMSTATE.code;
